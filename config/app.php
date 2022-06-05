@@ -127,6 +127,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Custom environment variables
+    |--------------------------------------------------------------------------
+    |
+    | Here is custom made environment variables
+    |
+    */
+
+    'seeder' => [
+        'admin_user_email' => env('CUSTOM_SEEDER_ADMIN_USER_EMAIL'),
+        'admin_user_name' => env('CUSTOM_SEEDER_ADMIN_USER_NAME'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Maintenance Mode Driver
     |--------------------------------------------------------------------------
     |

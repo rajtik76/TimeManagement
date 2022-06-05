@@ -1,5 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
+});
+
+Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
+
+Route::middleware('auth:web')->group(function () {
+    Route::get('/task', [TaskController::class, 'index'])->name('index');
 });
