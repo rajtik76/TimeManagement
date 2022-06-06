@@ -8,16 +8,10 @@ use Illuminate\Database\Seeder;
 
 class TaskSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        $adminUser = User::query()->where('email', config('app.seeder.admin_user_email'))->first();
-
-        Task::factory(20)->create(['user_id' => $adminUser]);
-        Task::factory(100)->create();
+        foreach (User::all() as $user) {
+            Task::factory(rand(10, 50))->create(['user_id' => $user->id]);
+        }
     }
 }

@@ -5,7 +5,8 @@
 @section('root-style')
     <style>
         .cursor-default {
-            background-color: lightblue !important;
+            background-color: violet !important;
+            color: white !important;
         }
     </style>
 @endsection
@@ -14,8 +15,7 @@
     <table class="table-auto w-full text-sm">
         <thead>
         <tr class="text-left bg-pink-50 text-lg">
-            <th class="py-4"><I></I>D</th>
-            <th>Task name</th>
+            <th class="py-4">Task name</th>
             <th>Notes</th>
             <th>URL</th>
             <th class="text-center">Actions</th>
@@ -24,7 +24,6 @@
         <tbody>
         @foreach($tasks as $task)
             <tr class="hover:bg-slate-100">
-                <td>{{ $task->id }}</td>
                 <td>{{ $task->task_name }}</td>
                 <td>{{ $task->task_notes }}</td>
                 <td>{{ $task->task_url }}</td>

@@ -7,25 +7,12 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        $adminUserName = config('app.seeder.admin_user_name');
-        $adminUserEmail = config('app.seeder.admin_user_email');
-
-        if (User::query()->where('email', $adminUserEmail)->doesntExist()) {
-            User::factory()->create([
-                'name' => $adminUserName,
-                'email' => $adminUserEmail,
-            ]);
-        }
-
         $this->call([
+            UserSeeder::class,
             TaskSeeder::class,
+            TaskTrackingTimeSeeder::class,
         ]);
     }
 }
