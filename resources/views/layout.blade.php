@@ -16,6 +16,7 @@
             font-family: 'Josefin Sans', sans-serif;
         }
     </style>
+    @yield('root-style')
 </head>
 
 <body class="text-lg">

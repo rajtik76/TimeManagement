@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/  
+*/
 
 Route::get('/', [LoginController::class, 'display'])->name('login.display');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 
 Route::middleware('auth:web')->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
-    Route::get('/task', [TaskController::class, 'index'])->name('index');
+    Route::get('/task', [TaskController::class, 'index'])->name('task.index');
 });

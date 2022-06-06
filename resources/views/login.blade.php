@@ -2,7 +2,7 @@
 
 @section('title', 'Login')
 
-@section('content')
+@section('root-content')
     <div class="flex h-screen justify-center items-center">
         <div class="border-solid border-4 border-blue-600/50 rounded-lg p-6 bg-slate-50 text-sm">
             <form method="post" action="{{ route('login') }}">

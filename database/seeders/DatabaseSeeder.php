@@ -23,5 +23,9 @@ class DatabaseSeeder extends Seeder
                 'email' => $adminUserEmail,
             ]);
         }
+
+        $this->call([
+            TaskSeeder::class,
+        ]);
     }
 }
