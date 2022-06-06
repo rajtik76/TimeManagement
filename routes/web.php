@@ -21,4 +21,6 @@ Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 Route::middleware('auth:web')->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/task', [TaskController::class, 'index'])->name('task.index');
+    Route::get('/task/{task}', [TaskController::class, 'edit'])->name('task.edit');
+    Route::put('/task/{task}', [TaskController::class, 'update'])->name('task.update');
 });

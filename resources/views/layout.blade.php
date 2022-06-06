@@ -10,6 +10,7 @@
 
     <title>@yield('title', 'Time management')</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.4.7/dist/flowbite.min.css" />
 
     <style>
         body {
@@ -21,5 +22,6 @@
 
 <body class="text-lg">
 @yield('root-content')
+<script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
 </body>
 </html>
