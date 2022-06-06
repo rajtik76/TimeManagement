@@ -6,7 +6,7 @@
     <div class="mb-4 border-b border-gray-200">
         <ul class="flex flex-wrap justify-center -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="profile-tab" data-tabs-target="#task" type="button" role="tab" aria-controls="task" aria-selected="true">Task
+                <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="profile-tab" data-tabs-target="#task" type="button" role="tab" aria-controls="task" aria-selected="true">Task Edit
                 </button>
             </li>
             <li class="mr-2" role="presentation">
@@ -18,7 +18,6 @@
     </div>
     <div id="myTabContent">
         <div class="p-4 bg-gray-50 rounded-lg" id="task" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="text-2xl text-center p-2 mb-1 bg-blue-50">Task edit</div>
             <form method="post" action="{{ route('task.update', $task->id) }}">
                 @csrf
                 @method('PUT')
