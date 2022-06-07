@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskTrackingTimeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,11 +21,18 @@ Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 
 Route::middleware('auth:web')->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
-    Route::get('/tasks', [TaskController::class, 'index'])->name('task.index');
-    Route::get('/tasks/create', [TaskController::class, 'create'])->name('task.create');
-    Route::post('/tasks', [TaskController::class, 'store'])->name('task.store');
-    Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('task.edit');
-    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('task.update');
-    Route::get('/tasks/{task}/tracking', [TaskController::class, 'trackingTimeIndex'])->name('task.tracking');
-    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('task.destroy');
+
+    Route::controller(TaskController::class)->group(function () {
+        Route::get('/tasks', 'index')->name('task.index');
+        Route::get('/tasks/create', 'create')->name('task.create');
+        Route::post('/tasks', 'store')->name('task.store');
+        Route::get('/tasks/{task}/edit', 'edit')->name('task.edit');
+        Route::put('/tasks/{task}', 'update')->name('task.update');
+        Route::get('/tasks/{task}/tracking', 'trackingTimeIndex')->name('task.tracking');
+        Route::delete('/tasks/{task}', 'destroy')->name('task.destroy');
+    });
+
+    Route::controller(TaskTrackingTimeController::class)->group(function() {
+        Route::delete('/tracking-times/{trackingTime}', 'destroy')->name('tracking-times.destroy');
+    });
 });
