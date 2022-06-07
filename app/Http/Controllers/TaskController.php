@@ -15,7 +15,7 @@ class TaskController extends Controller
         $tasks = Task::query()
             ->where('is_active', true)
             ->withSum('trackingTimes', 'spent_time')
-            ->paginate();
+            ->paginate(10);
 
         return view('task.index', compact('tasks'));
     }
@@ -23,8 +23,9 @@ class TaskController extends Controller
     public function edit(Task $task): View
     {
         $sum = TaskTrackingTime::where('task_id', $task->id)->sum('spent_time');
+        $trackingTimes = $task->trackingTimes()->orderByRaw('record_date desc, created_at desc')->get();
 
-        return view('task.edit', compact('task', 'sum'));
+        return view('task.edit', compact('task', 'sum', 'trackingTimes'));
     }
 
     public function update(Task $task): RedirectResponse

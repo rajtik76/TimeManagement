@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class TaskTrackingTime extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'record_date' => 'date',
+    ];
 }

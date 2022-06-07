@@ -6,7 +6,8 @@
     <div class="mb-4 border-b border-gray-200">
         <ul class="flex flex-wrap justify-center -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="profile-tab" data-tabs-target="#task" type="button" role="tab" aria-controls="task" aria-selected="true">Task Edit
+                <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="profile-tab" data-tabs-target="#task" type="button" role="tab" aria-controls="task" aria-selected="true">Task
+                    Edit
                 </button>
             </li>
             <li class="mr-2" role="presentation">
@@ -16,7 +17,9 @@
             </li>
         </ul>
     </div>
+
     <div id="myTabContent">
+        {{-- EDIT --}}
         <div class="p-4 bg-gray-50 rounded-lg" id="task" role="tabpanel" aria-labelledby="profile-tab">
             <form method="post" action="{{ route('task.update', $task->id) }}">
                 @csrf
@@ -83,37 +86,28 @@
                 </button>
             </form>
         </div>
+
+        {{-- TRACKING TIME --}}
         <div class="hidden p-4 bg-gray-50 rounded-lg" id="task-tracking-time" role="tabpanel" aria-labelledby="dashboard-tab">
-            <div class="relative overflow-x-auto">
-                <table class="w-1/2 text-sm text-left mx-auto">
-                    <thead class="text-base uppercase bg-slate-200">
+
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-center text-slate-500">
+                    <thead class="text-xs text-white uppercase bg-slate-500">
                     <tr>
                         <th scope="col" class="px-6 py-3">Date</th>
-                        <th scope="col" class="px-6 py-3">Time</th>
+                        <th scope="col" class="px-6 py-3">Time spent</th>
                         <th scope="col" class="px-6 py-3">Created</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($task->trackingTimes()->orderByRaw('record_date desc, created_at desc')->get() as $trackingTime)
-                        <tr class="bg-white border-b bg-slate-50 hover:bg-blue-100">
-                            <td class="px-6 py-1 font-medium whitespace-nowrap">
-                                {{ $trackingTime->record_date }}
-                            </td>
-                            <td class="px-6">
-                                {{ $trackingTime->spent_time }}
-                            </td>
-                            <td class="px-6">
-                                {{ $trackingTime->created_at }}
-                            </td>
+                    @foreach($trackingTimes as $trackingTime)
+                        <tr class="bg-white border-b">
+                            <td class="px-6 py-2">{{ $trackingTime->record_date->format("d.m.Y") }}</td>
+                            <td class="px-6 py-2">{{ $trackingTime->spent_time }} hours</td>
+                            <td class="px-6 py-2">{{ $trackingTime->created_at->format("d.m.Y H:i:s") }}</td>
                         </tr>
                     @endforeach
                     </tbody>
-                    <tfoot class="text-base uppercase bg-slate-200">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">SUM</th>
-                        <th scope="col" colspan="2" class="px-6 py-3">{{ $sum }}</th>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
