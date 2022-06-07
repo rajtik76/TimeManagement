@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Models\TaskTrackingTime;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -16,7 +15,7 @@ class TaskController extends Controller
      */
     public function index(): View
     {
-        $inactive = request()->has('inactive') && request()->boolean('inactive');
+        $inactive = (bool)request()->session()->get('inactive');
 
         $tasks = Task::query()
             ->withSum('trackingTimes', 'spent_time')
@@ -48,7 +47,7 @@ class TaskController extends Controller
     {
         $trackingTimes = $task->trackingTimes()->orderByRaw('record_date desc, created_at desc')->get();
 
-        return view('task.edit', compact('task','trackingTimes'));
+        return view('task.edit', compact('task', 'trackingTimes'));
     }
 
     /**
@@ -93,6 +92,16 @@ class TaskController extends Controller
         $task->delete();
 
         return to_route('task.index')->with('success', "Task `{$task->task_name}` was successfully deleted");
+    }
+
+    /**
+     * Toggle display inactive tasks
+     */
+    public function toggleDisplayInactiveTask(): RedirectResponse
+    {
+        request()->session()->put('inactive', !request()->session()->get('inactive', false));
+
+        return to_route('task.index');
     }
 
     /**
