@@ -9,6 +9,8 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['is_active', 'task_name', 'task_notes', 'task_url'];
+
     public function trackingTimes()
     {
         return $this->hasMany(TaskTrackingTime::class);

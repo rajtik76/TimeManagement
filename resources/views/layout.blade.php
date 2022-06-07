@@ -16,6 +16,11 @@
         body {
             font-family: 'Josefin Sans', sans-serif;
         }
+
+        .cursor-default {
+            background-color: cornflowerblue !important;
+            color: white !important;
+        }
     </style>
     @yield('root-style')
 </head>
