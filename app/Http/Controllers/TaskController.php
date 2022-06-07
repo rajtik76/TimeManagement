@@ -37,7 +37,7 @@ class TaskController extends Controller
     {
         $trackingTimes = $task->trackingTimes()->orderByRaw('record_date desc, created_at desc')->paginate(10);
 
-        return view('task.timeTracking', compact('trackingTimes'));
+        return view('task.time-tracking', compact('trackingTimes'));
     }
 
     /**

@@ -1,4 +1,4 @@
-@extends('layoutSigned')
+@extends('layout-signed')
 
 @section('title', 'Task time tracking')
 @section('breadcrumb', 'Task time tracking')
