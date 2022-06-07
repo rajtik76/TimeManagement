@@ -46,10 +46,9 @@ class TaskController extends Controller
      */
     public function edit(Task $task): View
     {
-        $sum = TaskTrackingTime::where('task_id', $task->id)->sum('spent_time');
         $trackingTimes = $task->trackingTimes()->orderByRaw('record_date desc, created_at desc')->get();
 
-        return view('task.edit', compact('task', 'sum', 'trackingTimes'));
+        return view('task.edit', compact('task','trackingTimes'));
     }
 
     /**
