@@ -12,15 +12,15 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('task_tracking_times', function (Blueprint $table) {
+        Schema::create('task_tracking_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_id')
                 ->constrained('tasks')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->date('record_date')->nullable(false);
-            $table->float('spent_time')->nullable(false);
-            $table->string('note');
+            $table->date('item_date')->nullable(false);
+            $table->float('item_hours')->nullable(false);
+            $table->string('item_note');
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('task_tracking_times');
+        Schema::dropIfExists('task_tracking_items');
     }
 };

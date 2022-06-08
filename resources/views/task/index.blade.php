@@ -39,7 +39,7 @@
                         @endif
                     </td>
                     <td class="px-6 py-2">
-                        <a href="{{ route('task.tracking', $task->id) }}" @class(['font-medium hover:underline', 'text-blue-400' => $task->is_active, 'text-red-400' => !$task->is_active])>{{ $task->tracking_times_sum_spent_time ?? '0.0'}}</a>
+                        <a href="{{ route('task.tracking', $task->id) }}" @class(['font-medium hover:underline', 'text-blue-400' => $task->is_active, 'text-red-400' => !$task->is_active])>{{ $task->tracking_items_sum_item_hours ?? '0.0'}}</a>
                     </td>
                     <td class="px-6 py-2">{{ $task->task_notes }}</td>
                     <td class="px-6 py-2 text-right">

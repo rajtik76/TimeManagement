@@ -34,7 +34,13 @@ Route::middleware('auth:web')->group(function () {
     });
 
     Route::controller(TaskTrackingTimeController::class)->group(function() {
-        Route::delete('/tracking-times/{trackingTime}', 'destroy')->name('tracking-times.destroy');
-        Route::get('/tracking-times/pdf/{year}/{month}', 'toPdf')->name('tracking-times.pdf');
+        Route::prefix('/tracking')->group(function () {
+            Route::post('/', 'store')->name('tracking.store');
+            Route::get('/{task}/create', 'create')->name('tracking.create');
+            Route::delete('/{item}', 'destroy')->name('tracking.destroy');
+            Route::put('/{item}', 'update')->name('tracking.update');
+            Route::get('/{item}/edit', 'edit')->name('tracking.edit');
+            Route::get('/pdf/{year}/{month}', 'toPdf')->name('tracking.pdf');
+        });
     });
 });

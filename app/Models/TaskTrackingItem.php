@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class TaskTrackingTime extends Model
+class TaskTrackingItem extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['item_date', 'item_hours', 'item_note'];
+
     protected $casts = [
-        'record_date' => 'date',
+        'item_date' => 'date',
     ];
 
     public function task(): BelongsTo

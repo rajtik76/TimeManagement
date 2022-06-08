@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory
  */
-class TaskTrackingTimeFactory extends Factory
+class TaskTrackingItemFactory extends Factory
 {
     public function definition(): array
     {
@@ -17,9 +17,9 @@ class TaskTrackingTimeFactory extends Factory
 
         return [
             'task_id' => Task::factory(),
-            'record_date' => $date,
-            'spent_time' => $this->faker->randomFloat(1, 1, 8),
-            'note' => $this->faker->sentence,
+            'item_date' => $date,
+            'item_hours' => $this->faker->randomFloat(1, 1, 8),
+            'item_note' => $this->faker->sentence,
             'created_at' => $timestamp,
             'updated_at' => $timestamp,
         ];

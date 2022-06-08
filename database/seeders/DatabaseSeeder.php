@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             TaskSeeder::class,
-            TaskTrackingTimeSeeder::class,
+            TaskTrackingItemSeeder::class,
         ]);
     }
 }

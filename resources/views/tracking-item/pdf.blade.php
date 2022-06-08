@@ -41,8 +41,8 @@
             $dailySum = 0;
             $monthlySum = 0;
         @endphp
-        @foreach($trackingItems as $item)
-            @if((!$loop->first && $date->format('d.m.Y') != $item->record_date->format('d.m.Y')))
+        @foreach($items as $item)
+            @if((!$loop->first && $date->format('d.m.Y') != $item->item_date->format('d.m.Y')))
                 {{-- Display daily sum on every day change --}}
                 <tr class="text-gray-700 uppercase bg-gray-200">
                     <th scope="col" class="px-6 py-3" colspan="2">{{ $date->format('d.m.Y') }} day in total</th>
@@ -55,10 +55,10 @@
             @endif
 
             <tr class="bg-white border-b">
-                <td class="px-6 py-2">{{ $item->record_date->format('d.m.Y') }}</td>
+                <td class="px-6 py-2">{{ $item->item_date->format('d.m.Y') }}</td>
                 <td class="px-6 py-2">{{ $item->task->task_name }}</td>
-                <td class="px-6 py-2">{{ $item->spent_time }}</td>
-                <td class="px-6 py-2">{{ $item->note }}</td>
+                <td class="px-6 py-2">{{ $item->item_hours }}</td>
+                <td class="px-6 py-2">{{ $item->item_note }}</td>
             </tr>
 
             @if($loop->last)
@@ -70,9 +70,9 @@
             @endif
 
             @php
-                $dailySum += $item->spent_time;
-                $monthlySum += $item->spent_time;
-                $date = $item->record_date;
+                $dailySum += $item->item_hours;
+                $monthlySum += $item->item_hours;
+                $date = $item->item_date;
                 $task = $item->task_id;
             @endphp
         @endforeach

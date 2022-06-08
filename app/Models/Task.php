@@ -11,8 +11,8 @@ class Task extends Model
 
     protected $fillable = ['is_active', 'task_name', 'task_notes', 'task_url'];
 
-    public function trackingTimes()
+    public function trackingItems()
     {
-        return $this->hasMany(TaskTrackingTime::class);
+        return $this->hasMany(TaskTrackingItem::class);
     }
 }

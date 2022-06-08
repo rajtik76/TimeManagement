@@ -11,6 +11,7 @@
             @method('DELETE')
         </form>
     @endif
+
     <form method="post" action="{{ route(isset($newTaskFlag) ? 'task.store' : 'task.update', $task->id) }}" id="task-edit-form">
         @csrf
         @if(!isset($newTaskFlag))

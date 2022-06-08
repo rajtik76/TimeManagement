@@ -18,7 +18,7 @@ class TaskController extends Controller
         $inactive = (bool)request()->session()->get('inactive');
 
         $tasks = Task::query()
-            ->withSum('trackingTimes', 'spent_time')
+            ->withSum('trackingItems', 'item_hours')
             ->orderBy('created_at', 'desc');
 
         if (!$inactive) {
@@ -35,9 +35,9 @@ class TaskController extends Controller
      */
     public function trackingTimeIndex(Task $task): View
     {
-        $trackingTimes = $task->trackingTimes()->orderByRaw('record_date desc, created_at desc')->paginate(10);
+        $trackingItems = $task->trackingItems()->orderByRaw('item_date desc, created_at desc')->paginate(10);
 
-        return view('task.time-tracking', compact('trackingTimes'));
+        return view('task.tracking-index', compact('trackingItems', 'task'));
     }
 
     /**
@@ -45,9 +45,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task): View
     {
-        $trackingTimes = $task->trackingTimes()->orderByRaw('record_date desc, created_at desc')->get();
-
-        return view('task.edit', compact('task', 'trackingTimes'));
+        return view('task.edit', compact('task'));
     }
 
     /**
