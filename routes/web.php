@@ -35,5 +35,6 @@ Route::middleware('auth:web')->group(function () {
 
     Route::controller(TaskTrackingTimeController::class)->group(function() {
         Route::delete('/tracking-times/{trackingTime}', 'destroy')->name('tracking-times.destroy');
+        Route::get('/tracking-times/pdf/{year}/{month}', 'toPdf')->name('tracking-times.pdf');
     });
 });
