@@ -13,15 +13,12 @@ class TaskTrackingItemFactory extends Factory
     public function definition(): array
     {
         $date = $this->faker->dateTimeThisYear();
-        $timestamp = $this->faker->dateTimeThisYear();
 
         return [
             'task_id' => Task::factory(),
             'item_date' => $date,
             'item_hours' => $this->faker->randomFloat(1, 1, 8),
-            'item_note' => $this->faker->sentence,
-            'created_at' => $timestamp,
-            'updated_at' => $timestamp,
+            'item_note' => $this->faker->boolean() ? $this->faker->sentence() : null,
         ];
     }
 }

@@ -20,7 +20,7 @@ return new class extends Migration {
                 ->cascadeOnDelete();
             $table->date('item_date')->nullable(false);
             $table->float('item_hours')->nullable(false);
-            $table->string('item_note');
+            $table->string('item_note')->nullable(true);
             $table->timestamps();
         });
     }
