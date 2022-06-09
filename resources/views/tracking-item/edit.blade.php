@@ -17,10 +17,10 @@
 
         <div class="mb-6">
             <label for="item_date" class="block mb-2 text-sm font-medium text-slate-500">Date</label>
-            <input type="date"
+            <input datepicker datepicker-format="dd/mm/yyyy" datepicker-autohide type="text"
                    name="item_date"
                    id="item_date"
-                   value="{{ old('item_date', $item->item_date?->format('Y-m-d')) }}"
+                   value="{{ old('item_date', $item->item_date?->format('d/m/Y')) }}"
                    class="border border-slate-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-30 p-2.5" required>
             @error('item_date')
             <div class="text-sm text-red-600">

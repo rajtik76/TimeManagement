@@ -40,7 +40,8 @@ Route::middleware('auth:web')->group(function () {
             Route::delete('/{item}', 'destroy')->name('tracking.destroy');
             Route::put('/{item}', 'update')->name('tracking.update');
             Route::get('/{item}/edit', 'edit')->name('tracking.edit');
-            Route::get('/pdf/{year}/{month}', 'toPdf')->name('tracking.pdf');
+            Route::get('/pdf', 'overview')->name('tracking.overview');
+            Route::post('/pdf', 'printableOverview')->name('tracking.printable-overview');
         });
     });
 });

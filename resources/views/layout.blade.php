@@ -6,7 +6,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,400;1,200&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet">
 
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
@@ -14,7 +14,7 @@
 
     <style>
         body {
-            font-family: 'Josefin Sans', sans-serif;
+            font-family: 'Quicksand', sans-serif;
         }
 
         .cursor-default {

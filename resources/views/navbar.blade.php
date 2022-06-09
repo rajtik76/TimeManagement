@@ -16,15 +16,6 @@
                     <span class="block text-sm font-medium text-gray-500 truncate">{{ auth()->user()->email }}</span>
                 </div>
                 <ul class="py-1" aria-labelledby="dropdown">
-{{--                    <li>--}}
-{{--                        <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>--}}
-{{--                    </li>--}}
-{{--                    <li>--}}
-{{--                        <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Settings</a>--}}
-{{--                    </li>--}}
-{{--                    <li>--}}
-{{--                        <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Earnings</a>--}}
-{{--                    </li>--}}
                     <li>
                         <a href="{{ route('logout') }}" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
                     </li>
@@ -42,10 +33,7 @@
                     <a href="{{ route('task.index') }}" class="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0" aria-current="page">Home</a>
                 </li>
                 <li>
-                    <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">Placeholder 1</a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">Placeholder 2</a>
+                    <a href="{{ route('tracking.overview') }}" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">Overview</a>
                 </li>
             </ul>
         </div>

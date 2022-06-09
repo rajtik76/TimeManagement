@@ -19,11 +19,26 @@ class TaskTrackingTimeController extends Controller
         return to_route('task.tracking', $item->task->id)->with('success', "Time tracking with time spent: {$item->item_hours} was successfully deleted");
     }
 
-    public function toPdf(int $year, int $month)
+    /**
+     * Items overview
+     */
+    public function overview(): View
     {
+        return view('tracking-item.overview');
+    }
+
+    /**
+     * Printable items overview
+     */
+    public function printableOverview(Request $request)
+    {
+        $attributes = $request->validate([
+            'overview_date' => 'required|date_format:m/Y',
+        ]);
+
         Debugbar::disable();
 
-        $date = Carbon::createFromDate($year, $month, 1);
+        $date = Carbon::createFromFormat('d/m/Y', '1/'. $attributes['overview_date']);
 
         $items = TaskTrackingItem::query()
             ->with('task')
@@ -32,7 +47,7 @@ class TaskTrackingTimeController extends Controller
             ->orderByRaw('item_date, task_id')
             ->get();
 
-        return view('tracking-item.pdf', compact('items', 'date'));
+        return view('tracking-item.overview-pdf', compact('items', 'date'));
     }
 
     /**
@@ -85,7 +100,7 @@ class TaskTrackingTimeController extends Controller
     protected function validateRequest(Request $request, bool $newItem): array
     {
         $rules = [
-            'item_date' => 'required|date_format:Y-m-d',
+            'item_date' => 'required|date_format:d/m/Y',
             'item_hours' => 'required|numeric',
             'item_note' => 'nullable|string',
         ];
@@ -94,6 +109,9 @@ class TaskTrackingTimeController extends Controller
             $rules['task_id'] = 'required|numeric';
         }
 
-        return $request->validate($rules);
+        $attributes = $request->validate($rules);
+        $attributes['item_date'] = Carbon::createFromFormat('d/m/Y', $attributes['item_date']);
+
+        return $attributes;
     }
 }

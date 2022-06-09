@@ -11,8 +11,12 @@ class LoginController extends Controller
     /**
      * Display login form
      */
-    public function display(): View
+    public function display(): View|RedirectResponse
     {
+        if (auth()->user()) {
+            return to_route('task.index');
+        }
+
         return view('login');
     }
 
