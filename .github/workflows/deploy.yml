@@ -22,15 +22,6 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
     
-    - name: Cache Composer dependencies
-      uses: actions/cache@v2
-      with:
-        path: /tmp/composer-cache
-        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-      
-    - name: Run composer
-      uses: php-actions/composer@v6
-      
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
