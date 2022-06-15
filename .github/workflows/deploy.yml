@@ -38,6 +38,12 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         protocol: ftps
+        exclude: | 
+          **/vendor/**
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/.env
   
   # This workflow contains a single job called "build"
   #build:
