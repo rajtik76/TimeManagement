@@ -27,6 +27,7 @@ jobs:
       with:
         node-version: 'latest'
         cache: 'npm'
+    - run: npm run install
     - run: npm run prod
     
     - name: 📂 Sync files
