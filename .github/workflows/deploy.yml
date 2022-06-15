@@ -22,6 +22,9 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
       
+    - name: Cleanup
+      run: rm -r storage/framework
+      
     - name: NPM compiling
       uses: actions/setup-node@v3
       with:
