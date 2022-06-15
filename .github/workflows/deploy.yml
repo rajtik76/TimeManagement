@@ -37,6 +37,7 @@ jobs:
         server: ${{ secrets.FTP_SERVER_URL }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
+        protocol: ftps
   
   # This workflow contains a single job called "build"
   #build:
