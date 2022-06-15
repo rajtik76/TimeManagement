@@ -22,9 +22,6 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
       
-    - name: Cleanup
-      run: rm -r storage/framework
-      
     - name: NPM compiling
       uses: actions/setup-node@v3
       with:
@@ -32,6 +29,9 @@ jobs:
         cache: 'npm'
     - run: npm install
     - run: npm run prod
+    
+    - name: Cleanup
+      run: rm -r storage/framework/cache
     
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
