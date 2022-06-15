@@ -21,6 +21,13 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
+      
+    - name: NPM compiling
+      uses: actions/setup-node@v3
+      with:
+        node-version: 'latest'
+        cache: 'npm'
+    - run: npm run prod
     
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
