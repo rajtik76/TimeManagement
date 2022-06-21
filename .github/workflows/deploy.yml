@@ -22,6 +22,14 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
       
+    - name: compose
+      uses: php-actions/composer@v6
+      
+    - name: PHPstan
+      uses: php-actions/phpstan@v3
+      with:
+        configuration: phpstan.neon
+      
     - name: NPM compiling
       uses: actions/setup-node@v3
       with:
