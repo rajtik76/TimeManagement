@@ -28,9 +28,8 @@ jobs:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       
-    - name: Compose + PHPUnit test
+    - name: Run composer
       uses: php-actions/composer@v6
-    - run: cp .env.example .env && php artisan key:generate && php artisan test
       
     - name: NPM compiling
       uses: actions/setup-node@v3
@@ -39,6 +38,9 @@ jobs:
         cache: 'npm'
     - run: npm install
     - run: npm run prod
+    
+    - name: Run PHPUnit tests
+      run: cp .env.example .env && php artisan key:generate && php artisan test
     
     - name: Cleanup
       run: rm -r storage/framework/cache
