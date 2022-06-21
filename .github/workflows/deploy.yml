@@ -31,6 +31,9 @@ jobs:
     - name: Run composer
       uses: php-actions/composer@v6
       
+    - name: PHPStan
+      uses: php-actions/phpstan@v3
+      
     - name: NPM compiling
       uses: actions/setup-node@v3
       with:
