@@ -56,7 +56,9 @@ class TaskTrackingTimeController extends Controller
             'overview_date' => 'required|date_format:m/Y',
         ]);
 
-        Debugbar::disable();
+        if (!app()->environment('production')) {
+            Debugbar::disable();
+        }
 
         $date = Carbon::createFromFormat('d/m/Y', '1/' . $attributes['overview_date']);
 
