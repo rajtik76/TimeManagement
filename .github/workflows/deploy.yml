@@ -28,10 +28,8 @@ jobs:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       
-    - name: Compose
+    - name: Compose + PHPUnit test
       uses: php-actions/composer@v6
-      
-    - name: Laravel PHPUnit tests
     - run: php artisan test
       
     - name: NPM compiling
