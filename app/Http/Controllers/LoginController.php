@@ -10,6 +10,8 @@ class LoginController extends Controller
 {
     /**
      * Display login form
+     *
+     * @return View|RedirectResponse
      */
     public function display(): View|RedirectResponse
     {
@@ -22,8 +24,11 @@ class LoginController extends Controller
 
     /**
      * Login
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function authenticate(Request $request)
+    public function authenticate(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -43,6 +48,9 @@ class LoginController extends Controller
 
     /**
      * Logout
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function logout(Request $request): RedirectResponse
     {

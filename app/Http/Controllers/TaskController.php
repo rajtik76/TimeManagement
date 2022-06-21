@@ -12,6 +12,8 @@ class TaskController extends Controller
 {
     /**
      * Tasks index
+     *
+     * @return View
      */
     public function index(): View
     {
@@ -32,6 +34,9 @@ class TaskController extends Controller
 
     /**
      * Task tracking time index
+     *
+     * @param Task $task
+     * @return View
      */
     public function trackingTimeIndex(Task $task): View
     {
@@ -42,6 +47,9 @@ class TaskController extends Controller
 
     /**
      * Task edit view
+     *
+     * @param Task $task
+     * @return View
      */
     public function edit(Task $task): View
     {
@@ -50,6 +58,10 @@ class TaskController extends Controller
 
     /**
      * Task update
+     *
+     * @param Task $task
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function update(Task $task, Request $request): RedirectResponse
     {
@@ -61,6 +73,8 @@ class TaskController extends Controller
 
     /**
      * Task create view
+     *
+     * @return View
      */
     public function create(): View
     {
@@ -72,11 +86,14 @@ class TaskController extends Controller
 
     /**
      * Task store
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $task = new Task($this->validateRequest($request, new Task()));
-        $task->user_id = auth()->user()->id;
+        $task->user_id = (int)auth()->id();
         $task->save();
 
         return to_route('task.index')->with('success', "Task `{$task->task_name}` was successfully created");
@@ -84,6 +101,9 @@ class TaskController extends Controller
 
     /**
      * Task destroy
+     *
+     * @param Task $task
+     * @return RedirectResponse
      */
     public function destroy(Task $task): RedirectResponse
     {
@@ -94,6 +114,8 @@ class TaskController extends Controller
 
     /**
      * Toggle display inactive tasks
+     *
+     * @return RedirectResponse
      */
     public function toggleDisplayInactiveTask(): RedirectResponse
     {
@@ -104,6 +126,11 @@ class TaskController extends Controller
 
     /**
      * Validate request
+     *
+     * @param Request $request
+     * @param Task $task
+     * @return array
+     * @phpstan-return array{task_name: string, task_notes: null|string, task_url: null|string, is_active: bool}
      */
     protected function validateRequest(Request $request, Task $task): array
     {

@@ -9,18 +9,35 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use InvalidArgumentException;
 
 class TaskTrackingTimeController extends Controller
 {
+    /**
+     * Destroy
+     *
+     * @param TaskTrackingItem $item
+     * @return RedirectResponse
+     */
     public function destroy(TaskTrackingItem $item): RedirectResponse
     {
-        $item->delete();
+        if ($item->task) {
+
+            $item->delete();
+
+        } else {
+
+            throw new InvalidArgumentException("Task ID not found");
+
+        }
 
         return to_route('task.tracking', $item->task->id)->with('success', "Time tracking with time spent: {$item->item_hours} was successfully deleted");
     }
 
     /**
      * Items overview
+     *
+     * @return View
      */
     public function overview(): View
     {
@@ -29,8 +46,11 @@ class TaskTrackingTimeController extends Controller
 
     /**
      * Printable items overview
+     *
+     * @param Request $request
+     * @return View
      */
-    public function printableOverview(Request $request)
+    public function printableOverview(Request $request): View
     {
         $attributes = $request->validate([
             'overview_date' => 'required|date_format:m/Y',
@@ -38,12 +58,16 @@ class TaskTrackingTimeController extends Controller
 
         Debugbar::disable();
 
-        $date = Carbon::createFromFormat('d/m/Y', '1/'. $attributes['overview_date']);
+        $date = Carbon::createFromFormat('d/m/Y', '1/' . $attributes['overview_date']);
+
+        if (!$date) {
+            throw new InvalidArgumentException("Date can't be created");
+        }
 
         $items = TaskTrackingItem::query()
             ->with('task')
-            ->whereYear('item_date', $date)
-            ->whereMonth('item_date', $date)
+            ->whereYear('item_date', $date->toDateString())
+            ->whereMonth('item_date', $date->toDateString())
             ->orderByRaw('item_date, task_id')
             ->get();
 
@@ -52,6 +76,9 @@ class TaskTrackingTimeController extends Controller
 
     /**
      * Create tracking item
+     *
+     * @param Task $task
+     * @return View
      */
     public function create(Task $task): View
     {
@@ -63,6 +90,9 @@ class TaskTrackingTimeController extends Controller
 
     /**
      * Edit tracking item
+     *
+     * @param TaskTrackingItem $item
+     * @return View
      */
     public function edit(TaskTrackingItem $item): View
     {
@@ -71,17 +101,32 @@ class TaskTrackingTimeController extends Controller
 
     /**
      * Tracking item update
+     *
+     * @param TaskTrackingItem $item
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function update(TaskTrackingItem $item, Request $request): RedirectResponse
     {
-        $item->fill($this->validateRequest($request, false));
-        $item->save();
+        if ($item->task) {
+
+            $item->fill($this->validateRequest($request, false));
+            $item->save();
+
+        } else {
+
+            throw new InvalidArgumentException("Task ID not found");
+
+        }
 
         return to_route('task.tracking', $item->task->id)->with('success', "Your tracked item id:{$item->id} was successfully edited");
     }
 
     /**
      * Store tracking item
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -91,11 +136,16 @@ class TaskTrackingTimeController extends Controller
         $item->task_id = $attributes['task_id'];
         $item->save();
 
-        return to_route('task.tracking', $item->task->id)->with('success', "Your tracked item id:{$item->id} was successfully edited");
+        return to_route('task.tracking', $item->task_id)->with('success', "Your tracked item id:{$item->id} was successfully edited");
     }
 
     /**
      * Validate request
+     *
+     * @param Request $request
+     * @param bool $newItem
+     * @return array
+     * @phpstan-return array{item_date: string, item_hours: int, item_note: null|string, task_id: int, item_date: Carbon}
      */
     protected function validateRequest(Request $request, bool $newItem): array
     {
@@ -106,11 +156,23 @@ class TaskTrackingTimeController extends Controller
         ];
 
         if ($newItem) {
+
             $rules['task_id'] = 'required|numeric';
+
         }
 
         $attributes = $request->validate($rules);
-        $attributes['item_date'] = Carbon::createFromFormat('d/m/Y', $attributes['item_date']);
+
+        if ($date = Carbon::createFromFormat('d/m/Y', $attributes['item_date'])) {
+
+            $attributes['item_date'] = $date;
+
+        } else {
+
+            throw new InvalidArgumentException("Can't parse date `{$attributes['item_date']}` to Carbon");
+
+        }
+
 
         return $attributes;
     }
