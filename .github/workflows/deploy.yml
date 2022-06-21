@@ -65,6 +65,9 @@ jobs:
           **/.git*/**
           **/node_modules/**
           **/.env
+          **/DOCKER_ENV
+          **/docker_tag
+          **/output.log
   
   # This workflow contains a single job called "build"
   #build:
