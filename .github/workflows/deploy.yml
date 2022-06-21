@@ -34,7 +34,8 @@ jobs:
     - name: PHPStan
       uses: php-actions/phpstan@v3
       with:
-        configuration: ../phpstan.neon
+        path: /
+        configuration: phpstan.neon
         memory_limit: 1G
       
     - name: NPM compiling
