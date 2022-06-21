@@ -30,7 +30,7 @@ jobs:
       
     - name: Compose + PHPUnit test
       uses: php-actions/composer@v6
-    - run: php artisan test
+    - run: cp .env.example .env && php artisan key:generate && php artisan test
       
     - name: NPM compiling
       uses: actions/setup-node@v3
