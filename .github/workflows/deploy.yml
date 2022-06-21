@@ -19,7 +19,7 @@ jobs:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: 🚚 Get latest code
+    - name: Get latest code
       uses: actions/checkout@v3
     
     - name: Composer cache
@@ -28,9 +28,11 @@ jobs:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       
-    - name: Compose + PHPstan
+    - name: Compose
       uses: php-actions/composer@v6
-    - run: composer phpstan
+      
+    - name: Laravel PHPUnit tests
+    - run: php artisan test
       
     - name: NPM compiling
       uses: actions/setup-node@v3
