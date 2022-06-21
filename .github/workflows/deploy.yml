@@ -29,6 +29,7 @@ jobs:
       uses: php-actions/phpstan@v3
       with:
         path: /app
+        memory_limit: 256M
       
     - name: NPM compiling
       uses: actions/setup-node@v3
