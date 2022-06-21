@@ -30,7 +30,7 @@ jobs:
       
     - name: Compose + PHPstan
       uses: php-actions/composer@v6
-    - run: compose phpstan
+    - run: composer phpstan
       
     - name: NPM compiling
       uses: actions/setup-node@v3
