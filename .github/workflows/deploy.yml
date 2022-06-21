@@ -28,7 +28,7 @@ jobs:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       
-    - name: Run composer
+    - name: Composer install
       uses: php-actions/composer@v6
       
     - name: PHPStan
@@ -38,7 +38,7 @@ jobs:
         path: app/
         memory_limit: 1G
       
-    - name: NPM compiling
+    - name: Node setup
       uses: actions/setup-node@v3
       with:
         node-version: 'latest'
@@ -46,13 +46,13 @@ jobs:
     - run: npm install
     - run: npm run prod
     
-    - name: Run PHPUnit tests
+    - name: PHPUnit tests
       run: cp .env.example .env && php artisan key:generate && php artisan test
     
-    - name: Cleanup
+    - name: Cache cleanup
       run: rm -r storage/framework/cache
     
-    - name: 📂 Sync files
+    - name: Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
         server: ${{ secrets.FTP_SERVER_URL }}
