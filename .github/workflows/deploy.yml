@@ -28,10 +28,9 @@ jobs:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       
-    - name: compose
+    - name: Compose + PHPstan
       uses: php-actions/composer@v6
-      with:
-        command: composer phpstan
+    - run: compose phpstan
       
     - name: NPM compiling
       uses: actions/setup-node@v3
