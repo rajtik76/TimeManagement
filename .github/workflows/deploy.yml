@@ -28,6 +28,7 @@ jobs:
     - name: PHPstan
       uses: php-actions/phpstan@v3
       with:
+        path: /
         configuration: ../phpstan.neon
       
     - name: NPM compiling
