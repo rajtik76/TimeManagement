@@ -1,13 +1,13 @@
 <nav class="bg-gradient-to-l from-cyan-400 to-violet-500 px-2 sm:px-4 py-2.5 rounded">
     <div class="flex flex-wrap justify-between items-center mx-auto">
         <a href="{{ route('task.index') }}" class="flex items-center">
-            <img src="{{ mix('images/clock-svgrepo-com.svg') }}" class="mr-3 h-6 sm:h-9" alt="Time Logo">
+            <img src="images/clock-svgrepo-com.svg" class="mr-3 h-6 sm:h-9" alt="Time Logo">
             <span class="self-center text-xl font-semibold whitespace-nowrap">Time management</span>
         </a>
         <div class="flex items-center md:order-2">
             <button type="button" class="flex mr-3 text-sm bg-gray-300 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
                 <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="{{ mix('images/users-svgrepo-com.svg') }}" alt="user photo">
+                <img class="w-8 h-8 rounded-full" src="images/users-svgrepo-com.svg" alt="user photo">
             </button>
 
             <div class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow" id="dropdown" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1109px, 812px);" data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="top">

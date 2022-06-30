@@ -1,4 +1,4 @@
-import { createApp} from "vue";
+import { createApp} from "vue/dist/vue.esm-bundler";
 import HelloWorld from './components/Welcome.vue';
 
 const app = createApp({});
