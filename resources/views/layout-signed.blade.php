@@ -38,7 +38,9 @@
         </nav>
     @endif
 
-    <div class="px-4 py-6">
+    <div class="px-4 py-6" id="app">
         @yield('content')
     </div>
+
+    <script src="{{ mix('js/vue.js') }}"></script>
 @endsection
