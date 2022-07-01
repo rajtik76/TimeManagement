@@ -18,8 +18,7 @@ return [
                     'resources/scripts/main.ts',
                     'resources/js/app.js',
                     'resources/js/vue.js',
-                    'resources/css/app.css',
-                    'resources/js',
+                    'resources/css/app.css'
                 ],
                 'ignore' => '/\\.(d\\.ts|json)$/',
             ],
