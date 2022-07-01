@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Services\Grid\Column;
+use App\Services\Grid\ColumnSortOrder;
+use App\Services\Grid\Grid;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -19,17 +22,35 @@ class TaskController extends Controller
     {
         $inactive = (bool)request()->session()->get('inactive');
 
-        $tasks = Task::query()
-            ->withSum('trackingItems', 'item_hours')
-            ->orderBy('created_at', 'desc');
+        $tasks = Task::query()->withSum('trackingItems', 'item_hours');
 
         if (!$inactive) {
             $tasks->where('is_active', true);
         }
 
-        $tasks = $tasks->paginate();
+        $grid = (new Grid())
+            ->setBuilder($tasks)
+            ->setColumn(
+                (new Column('task_name', 'Task name'))
+                    ->setSortable(true)
+                    ->setDefaultSortOrder(ColumnSortOrder::DESC)
+                    ->setRenderWrapper(function (Task $task) {
+                        $class = 'font-medium hover:underline';
+                        if ($task->is_active) {
+                            $class .= ' text-blue-400';
+                        } else {
+                            $class .= ' text-red-500';
+                        }
 
-        return view('task.index', compact('tasks', 'inactive'));
+                        if ($task->task_url) {
+                            return "<a class='{$class}' href='{$task->task_url}' target='_blank'>{$task->task_name}</a>";
+                        }
+
+                        return $task->task_name;
+                    }))
+            ->setColumn((new Column('task_notes', 'Task notes'))->setSortable(true));
+
+        return view('task.index', compact('inactive', 'grid'));
     }
 
     /**
