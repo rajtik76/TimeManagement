@@ -27,6 +27,9 @@ class TaskController extends Controller
             ->join('customers', 'customer_id', '=', 'customers.id')
             ->with('customer')->withSum('trackingItems', 'item_hours');
 
+        /** @var array<int, string> $customers */
+        $customers = Customer::pluck('name', 'id')->toArray();
+
         $grid = (new Grid())
             ->setBuilder($tasks)
             ->setConditionalRowClass(fn($data) => $data->is_active == 0 ? 'bg-red-200' : '')
@@ -34,7 +37,7 @@ class TaskController extends Controller
                 (new Column('customer_id', 'Customer'))
                     ->setSortable(true, 'customers.name')
                     ->setFilterable(true)
-                    ->setFilterOptions(Customer::pluck('name', 'id')->toArray())
+                    ->setFilterOptions($customers)
                     ->setRenderWrapper(fn($data) => $data->customer->name)
             )
             ->setColumn(

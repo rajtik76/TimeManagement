@@ -70,20 +70,20 @@ class CustomerController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return View
      */
-    public function edit($id): View
+    public function edit(int $id): View
     {
         return view('customer.edit', ['customer' => Customer::find($id)]);
     }
 
     /**
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, int $id): RedirectResponse
     {
         $attributes = $request->validate([
             'customer_name' => [
@@ -93,21 +93,27 @@ class CustomerController extends Controller
             ]
         ]);
 
-        $customer = Customer::find($id);
-        $customer->name = $attributes['customer_name'];
-        $customer->save();
+        if ($customer = Customer::find($id)) {
+            $customer->name = $attributes['customer_name'];
+            $customer->save();
+        } else {
+            throw new \InvalidArgumentException('Missing customer');
+        }
 
         return to_route('customers.index')->with('success', "Customer `{$customer->name}` was successfully updated");
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      */
-    public function destroy($id): RedirectResponse
+    public function destroy(int $id): RedirectResponse
     {
-        $customer = Customer::find($id);
-        $customer->delete();
+        if ($customer = Customer::find($id)) {
+            $customer->delete();
+        } else {
+            throw new \InvalidArgumentException("Missing customer");
+        }
 
         return to_route('customers.index')->with('success', "Customer `{$customer->name}` was successfully deleted");
     }
