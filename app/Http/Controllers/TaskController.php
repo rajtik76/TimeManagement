@@ -66,7 +66,7 @@ class TaskController extends Controller
             )
             ->setColumn((new Column('task_notes', 'Task notes'))->setSortable(true))
             ->setColumn((new Column('created_at', 'Created'))->setSortable(true)->setDefaultSortOrder(ColumnSortOrder::DESC))
-            ->setAction(new ColumnAction('edit', fn($data) => A::create()->href(route('task.edit', $data->id))->target('_blank')->class('font-bold text-white bg-blue-500 py-1.5 px-4 rounded')->text('Edit')));
+            ->setAction(new ColumnAction('edit', fn($data) => A::create()->href(route('task.edit', $data->id))->class('font-bold text-white bg-blue-500 py-1.5 px-4 rounded')->text('Edit')));
 
         return view('task.index', compact('grid'));
     }
@@ -92,7 +92,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task): View
     {
-        return view('task.edit', compact('task'));
+        return view('task.edit', ['task' => $task, 'customers' => Customer::pluck('name', 'id')->toArray()]);
     }
 
     /**
@@ -117,10 +117,7 @@ class TaskController extends Controller
      */
     public function create(): View
     {
-        $newTaskFlag = true;
-        $task = new Task();
-
-        return view('task.create', compact('newTaskFlag', 'task'));
+        return view('task.create', ['newTaskFlag' => true, 'task' => new Task(), 'customers' => Customer::pluck('name', 'id')->toArray()]);
     }
 
     /**
@@ -170,6 +167,7 @@ class TaskController extends Controller
         }
 
         $rules = [
+            'customer_id' => 'required|exists:customers,id',
             'task_name' => $taskNameRules,
             'task_notes' => ['nullable', 'string'],
             'task_url' => ['nullable', 'url'],

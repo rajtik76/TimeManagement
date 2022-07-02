@@ -11,7 +11,7 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['is_active', 'task_name', 'task_notes', 'task_url'];
+    protected $fillable = ['customer_id', 'is_active', 'task_name', 'task_notes', 'task_url'];
 
     /**
      * @return HasMany
