@@ -4,7 +4,6 @@ namespace App\Services\Grid;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
 class Column
 {
@@ -32,6 +31,11 @@ class Column
      * @var ColumnSortOrder
      */
     protected ColumnSortOrder $currentSortOrder = ColumnSortOrder::NONE;
+
+    /**
+     * @var string|null
+     */
+    protected string|null $sortRawColumn;
 
     /**
      * @var bool
@@ -114,11 +118,13 @@ class Column
 
     /**
      * @param bool $sortable
+     * @param null|string $rawColumn
      * @return Column
      */
-    public function setSortable(bool $sortable): Column
+    public function setSortable(bool $sortable, null|string $rawColumn = null): Column
     {
         $this->sortable = $sortable;
+        $this->sortRawColumn = $rawColumn;
         return $this;
     }
 
@@ -284,5 +290,13 @@ class Column
     {
         $this->defaultFilterOption = $defaultFilterOption;
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSortRawColumn(): ?string
+    {
+        return $this->sortRawColumn;
     }
 }

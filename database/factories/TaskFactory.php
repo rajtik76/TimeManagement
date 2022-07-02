@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Customer;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,6 +22,7 @@ class TaskFactory extends Factory
         $timestamp = $this->faker->dateTimeThisDecade;
 
         return [
+            'customer_id' => Customer::factory(),
             'user_id' => User::factory(),
             'is_active' => true,
             'task_name' => $this->faker->unique()->sentence(),

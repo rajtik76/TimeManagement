@@ -4,8 +4,8 @@
     /** @var \App\Services\Grid\Grid $grid */
 @endphp
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left text-gray-500">
+<div class="relative overflow-x-auto shadow-md rounded-lg">
+    <table class="w-full table-auto text-sm text-left text-gray-500">
         {{--  header --}}
         <thead class="text-xs text-white uppercase bg-slate-500">
         <tr>
@@ -38,7 +38,7 @@
             @endforeach
 
             @if($grid->getActions())
-                <th scope="col" class="px-6 py-3">Actions</th>
+                <th scope="col" class="px-6 py-3 border">Actions</th>
             @endif
         </tr>
 
@@ -86,11 +86,14 @@
                     </td>
                 @endforeach
 
-                @foreach($grid->getActions() as $action)
-                    <td class="px-6 py-2">
-                        {!! $action->render($data) !!}
+                {{-- actions --}}
+                @if($grid->getActions())
+                    <td class="px-6 py-2 border flex flex-row gap-1 items-center">
+                        @foreach($grid->getActions() as $action)
+                            <span>{!! $action->render($data) !!}</span>
+                        @endforeach
                     </td>
-                @endforeach
+                @endif
             </tr>
         @endforeach
         </tbody>

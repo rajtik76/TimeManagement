@@ -37,7 +37,7 @@ class Grid
         foreach ($this->getColumns() as $column) {
 
             if ($column->isSortable() && $this->getColumnSortOrder($column) != ColumnSortOrder::NONE) {
-                $builder->orderBy($column->getName(), $this->getColumnSortOrder($column)->value);
+                $builder->orderBy($column->getSortRawColumn() ?? $column->getName(), $this->getColumnSortOrder($column)->value);
             }
 
             if ($column->isFilterable() && $this->getColumnFilter($column) != 'all') {
