@@ -30,7 +30,6 @@ Route::middleware('auth:web')->group(function () {
         Route::put('/tasks/{task}', 'update')->name('task.update');
         Route::delete('/tasks/{task}', 'destroy')->name('task.destroy');
         Route::get('/tasks/{task}/tracking', 'trackingTimeIndex')->name('task.tracking');
-        Route::get('/tasks/inactive/toggle', 'toggleDisplayInactiveTask')->name('tasks.inactive.toggle');
     });
 
     Route::controller(TaskTrackingTimeController::class)->group(function() {

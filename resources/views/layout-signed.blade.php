@@ -38,7 +38,10 @@
         </nav>
     @endif
 
-    <div class="px-4 py-6">
+    <div class="px-4 py-4">
         @yield('content')
+    </div>
+    <div id="app">
+        {{--<hello-world/>--}}
     </div>
 @endsection

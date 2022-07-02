@@ -1,15 +1,16 @@
 <nav class="bg-gradient-to-l from-cyan-400 to-violet-500 px-2 sm:px-4 py-2.5 rounded">
     <div class="flex flex-wrap justify-between items-center mx-auto">
         <a href="{{ route('task.index') }}" class="flex items-center">
-            <img src="{{ mix('images/clock-svgrepo-com.svg') }}" class="mr-3 h-6 sm:h-9" alt="Time Logo">
+            <img src="/images/clock-svgrepo-com.svg" class="mr-3 h-6 sm:h-9" alt="Time Logo">
             <span class="self-center text-xl font-semibold whitespace-nowrap">Time management</span>
         </a>
         <div class="flex items-center md:order-2">
             <button type="button" class="flex mr-3 text-sm bg-gray-300 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
                 <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="{{ mix('images/users-svgrepo-com.svg') }}" alt="user photo">
+                <img class="w-8 h-8 rounded-full" src="/images/users-svgrepo-com.svg" alt="user photo">
             </button>
 
+            {{-- dropdown menu --}}
             <div class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow" id="dropdown" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1109px, 812px);" data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="top">
                 <div class="py-3 px-4">
                     <span class="block text-sm text-gray-900">{{ auth()->user()->name }}</span>
@@ -30,10 +31,10 @@
         <div class="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-2">
             <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
                 <li>
-                    <a href="{{ route('task.index') }}" class="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0" aria-current="page">Home</a>
+                    <a href="{{ route('task.index') }}" @class(["block py-2 pr-4 pl-3 hover:underline hover:font-bold hover:text-white", "text-red-700" => request()->routeIs('task.index')]) aria-current="page">Home</a>
                 </li>
                 <li>
-                    <a href="{{ route('tracking.overview') }}" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">Overview</a>
+                    <a href="{{ route('tracking.overview') }}" @class(["block py-2 pr-4 pl-3 hover:underline hover:font-bold hover:text-white", "text-red-700" => request()->routeIs('tracking.overview')])>Overview</a>
                 </li>
             </ul>
         </div>

@@ -56,10 +56,6 @@ class TaskTrackingTimeController extends Controller
             'overview_date' => 'required|date_format:m/Y',
         ]);
 
-        if (!app()->environment('production')) {
-            Debugbar::disable();
-        }
-
         $date = Carbon::createFromFormat('d/m/Y', '1/' . $attributes['overview_date']);
 
         if (!$date) {
@@ -68,8 +64,8 @@ class TaskTrackingTimeController extends Controller
 
         $items = TaskTrackingItem::query()
             ->with('task')
-            ->whereYear('item_date', $date->toDateString())
-            ->whereMonth('item_date', $date->toDateString())
+            ->whereYear('item_date', strval($date->year))
+            ->whereMonth('item_date', strval($date->month))
             ->orderByRaw('item_date, task_id')
             ->get();
 
