@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Task;
 use App\Models\TaskTrackingItem;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -41,7 +43,7 @@ class TaskTrackingTimeController extends Controller
      */
     public function overview(): View
     {
-        return view('tracking-item.overview');
+        return view('tracking-item.overview', ['customers' => Customer::pluck('name', 'id')->toArray()]);
     }
 
     /**
@@ -54,6 +56,7 @@ class TaskTrackingTimeController extends Controller
     {
         $attributes = $request->validate([
             'overview_date' => 'required|date_format:m/Y',
+            'customer' => 'required|int|exists:customers,id',
         ]);
 
         $date = Carbon::createFromFormat('d/m/Y', '1/' . $attributes['overview_date']);
@@ -63,6 +66,7 @@ class TaskTrackingTimeController extends Controller
         }
 
         $items = TaskTrackingItem::query()
+            ->whereHas('task', fn(Builder $builder) => $builder->where('customer_id', $attributes['customer']))
             ->with('task')
             ->whereYear('item_date', strval($date->year))
             ->whereMonth('item_date', strval($date->month))

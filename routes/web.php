@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskTrackingTimeController;
@@ -20,7 +21,10 @@ Route::get('/', [LoginController::class, 'display'])->name('login.display');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 
 Route::middleware('auth:web')->group(function () {
+
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    Route::resource('customers', CustomerController::class);
 
     Route::controller(TaskController::class)->group(function () {
         Route::get('/tasks', 'index')->name('task.index');
@@ -32,7 +36,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/tasks/{task}/tracking', 'trackingTimeIndex')->name('task.tracking');
     });
 
-    Route::controller(TaskTrackingTimeController::class)->group(function() {
+    Route::controller(TaskTrackingTimeController::class)->group(function () {
         Route::prefix('/tracking')->group(function () {
             Route::post('/', 'store')->name('tracking.store');
             Route::get('/{task}/create', 'create')->name('tracking.create');

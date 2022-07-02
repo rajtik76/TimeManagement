@@ -36,6 +36,9 @@
                 <li>
                     <a href="{{ route('tracking.overview') }}" @class(["block py-2 pr-4 pl-3 hover:underline hover:font-bold hover:text-white", "text-red-700" => request()->routeIs('tracking.overview')])>Overview</a>
                 </li>
+                <li>
+                    <a href="{{ route('customers.index') }}" @class(["block py-2 pr-4 pl-3 hover:underline hover:font-bold hover:text-white", "text-red-700" => request()->routeIs('customers.index')])>Customers</a>
+                </li>
             </ul>
         </div>
     </div>

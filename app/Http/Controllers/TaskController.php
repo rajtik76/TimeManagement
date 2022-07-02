@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Task;
 use App\Services\Grid\Column;
 use App\Services\Grid\ColumnAction;
@@ -11,7 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Spatie\Html\BaseElement;
 use Spatie\Html\Elements\A;
 
 class TaskController extends Controller
@@ -23,13 +23,25 @@ class TaskController extends Controller
      */
     public function index(): View
     {
-        $tasks = Task::query()->withSum('trackingItems', 'item_hours');
+        $tasks = Task::query()
+            ->join('customers', 'customer_id', '=', 'customers.id')
+            ->with('customer')->withSum('trackingItems', 'item_hours');
+
+        /** @var array<int, string> $customers */
+        $customers = Customer::pluck('name', 'id')->toArray();
 
         $grid = (new Grid())
             ->setBuilder($tasks)
             ->setConditionalRowClass(fn($data) => $data->is_active == 0 ? 'bg-red-200' : '')
             ->setColumn(
-                (new Column('task_name', 'Task name'))
+                (new Column('customer_id', 'Customer'))
+                    ->setSortable(true, 'customers.name')
+                    ->setFilterable(true)
+                    ->setFilterOptions($customers)
+                    ->setRenderWrapper(fn($data) => $data->customer->name)
+            )
+            ->setColumn(
+                (new Column('name', 'Task name'))
                     ->setSortable(true)
                     ->setRenderWrapper(fn($data) => $data->task_url
                         ? A::create()
