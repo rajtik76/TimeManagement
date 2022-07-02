@@ -6,8 +6,10 @@
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left text-gray-500">
+        {{--  header --}}
         <thead class="text-xs text-white uppercase bg-slate-500">
         <tr>
+            @php($haveFilteredColumns = false)
             @foreach($grid->getColumns() as $column)
                 <th scope="col" class="px-6 py-3">
                     <span class="flex items-stretch">
@@ -29,25 +31,70 @@
                             @endif
                         @endif
                     </span>
+                    @if($column->isFilterable())
+                        @php($haveFilteredColumns = true)
+                    @endif
                 </th>
             @endforeach
+
+            @if($grid->getActions())
+                <th scope="col" class="px-6 py-3">Actions</th>
+            @endif
         </tr>
-        </thead>
-        <tbody>
-        @foreach($grid->getData() as $row)
-            <tr class="bg-white border-b hover:bg-slate-50">
+
+        {{-- filters --}}
+        @if($haveFilteredColumns)
+            <tr>
                 @foreach($grid->getColumns() as $column)
-                    <td class="px-6 py-2">
-                        @if($column->getRenderWrapper())
-                            {!! $column->render($row) !!}
-                        @else
-                            {{ $column->render($row) }}
+                    <th scope="col" class="bg-slate-50 border px-1 pb-2">
+                        @if($column->isFilterable())
+                            <select id="column-{{ $column->getName() }}-select"
+                                    class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full"
+                                    onchange="onFilterChange(this)">
+                                @foreach($column->getFilterOptions() as $key => $value)
+                                    <option value="{{ $key }}" @selected($key == $column->getCurrentFilter()) data-filter-link="{{ $column->getFilterLink($key) }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
+
+                            <script type="text/javascript">
+                                function onFilterChange(el) {
+                                    window.location.href = el.options[el.selectedIndex].dataset.filterLink;
+                                }
+                            </script>
                         @endif
+                    </th>
+                @endforeach
+
+                @if($grid->getActions())
+                    <th scope="col" class="bg-slate-50 border px-1 pb-2"></th>
+                @endif
+            </tr>
+        @endif
+        </thead>
+
+        {{-- body --}}
+        <tbody>
+        @foreach($grid->getData() as $data)
+            <tr class="bg-white border-b hover:bg-slate-100 {{ $grid->getConditionalRowClass() ? call_user_func($grid->getConditionalRowClass(), $data) : ''}}">
+                @foreach($grid->getColumns() as $column)
+                    <td class="px-6 py-2 border">
+                        @if($column->getRenderWrapper())
+                            {!! $column->render($data) !!}
+                        @else
+                            {{ $column->render($data) }}
+                        @endif
+                    </td>
+                @endforeach
+
+                @foreach($grid->getActions() as $action)
+                    <td class="px-6 py-2">
+                        {!! $action->render($data) !!}
                     </td>
                 @endforeach
             </tr>
         @endforeach
         </tbody>
+
     </table>
 </div>
 

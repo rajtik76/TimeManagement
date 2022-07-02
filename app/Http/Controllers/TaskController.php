@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Services\Grid\Column;
+use App\Services\Grid\ColumnAction;
 use App\Services\Grid\ColumnSortOrder;
 use App\Services\Grid\Grid;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Spatie\Html\BaseElement;
+use Spatie\Html\Elements\A;
 
 class TaskController extends Controller
 {
@@ -20,37 +23,40 @@ class TaskController extends Controller
      */
     public function index(): View
     {
-        $inactive = (bool)request()->session()->get('inactive');
-
         $tasks = Task::query()->withSum('trackingItems', 'item_hours');
-
-        if (!$inactive) {
-            $tasks->where('is_active', true);
-        }
 
         $grid = (new Grid())
             ->setBuilder($tasks)
+            ->setConditionalRowClass(fn($data) => $data->is_active == 0 ? 'bg-red-200' : '')
             ->setColumn(
                 (new Column('task_name', 'Task name'))
                     ->setSortable(true)
-                    ->setDefaultSortOrder(ColumnSortOrder::DESC)
-                    ->setRenderWrapper(function (Task $task) {
-                        $class = 'font-medium hover:underline';
-                        if ($task->is_active) {
-                            $class .= ' text-blue-400';
-                        } else {
-                            $class .= ' text-red-500';
-                        }
+                    ->setRenderWrapper(fn($data) => $data->task_url
+                        ? A::create()
+                            ->href($data->task_url)
+                            ->target('_blank')
+                            ->class('font-medium hover:underline text-blue-500')
+                            ->text($data->task_name)
+                            ->toHtml()
+                        : $data->task_name))
+            ->setColumn(
+                (new Column('is_active', 'Active'))
+                    ->setSortable(true)
+                    ->setRenderWrapper(fn($data) => $data->is_active ? 'Yes' : 'No')
+                    ->setFilterable(true)
+                    ->setFilterOptions([0 => 'No', 1 => 'Yes'])
+                    ->setDefaultFilterOption(1)
+            )
+            ->setColumn(
+                (new Column('tracking_items_sum_item_hours', 'Hours'))
+                    ->setSortable(true)
+                    ->setRenderWrapper(fn($data) => html()->a(route('task.tracking', $data->id))->attribute('target', '_blank')->class('font-medium hover:underline text-blue-500')->text($data->tracking_items_sum_item_hours)->toHtml())
+            )
+            ->setColumn((new Column('task_notes', 'Task notes'))->setSortable(true))
+            ->setColumn((new Column('created_at', 'Created'))->setSortable(true)->setDefaultSortOrder(ColumnSortOrder::DESC))
+            ->setAction(new ColumnAction('edit', fn($data) => A::create()->href(route('task.edit', $data->id))->target('_blank')->class('font-bold text-white bg-blue-500 py-1.5 px-4 rounded')->text('Edit')));
 
-                        if ($task->task_url) {
-                            return "<a class='{$class}' href='{$task->task_url}' target='_blank'>{$task->task_name}</a>";
-                        }
-
-                        return $task->task_name;
-                    }))
-            ->setColumn((new Column('task_notes', 'Task notes'))->setSortable(true));
-
-        return view('task.index', compact('inactive', 'grid'));
+        return view('task.index', compact('grid'));
     }
 
     /**
@@ -131,18 +137,6 @@ class TaskController extends Controller
         $task->delete();
 
         return to_route('task.index')->with('success', "Task `{$task->task_name}` was successfully deleted");
-    }
-
-    /**
-     * Toggle display inactive tasks
-     *
-     * @return RedirectResponse
-     */
-    public function toggleDisplayInactiveTask(): RedirectResponse
-    {
-        request()->session()->put('inactive', !request()->session()->get('inactive', false));
-
-        return to_route('task.index');
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Services\Grid;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Column
 {
@@ -30,6 +32,26 @@ class Column
      * @var ColumnSortOrder
      */
     protected ColumnSortOrder $currentSortOrder = ColumnSortOrder::NONE;
+
+    /**
+     * @var bool
+     */
+    protected bool $filterable = false;
+
+    /**
+     * @var array<int|string, string>
+     */
+    protected array $filterOptions = [];
+
+    /**
+     * @var mixed|string
+     */
+    protected mixed $defaultFilterOption = 'all';
+
+    /**
+     * @var mixed|string
+     */
+    protected mixed $currentFilter = 'all';
 
     /**
      * @var callable|null
@@ -126,10 +148,10 @@ class Column
     public function render(Model $data): string
     {
         if ($this->renderWrapper) {
-            return call_user_func($this->renderWrapper, $data);
+            return strval(call_user_func($this->renderWrapper, $data));
         }
 
-        return $data[$this->name];
+        return strval($data[$this->name]);
     }
 
     /**
@@ -142,6 +164,18 @@ class Column
             ColumnSortOrder::DESC => "{$this->name},none",
             ColumnSortOrder::NONE => "{$this->name},asc",
         }]);
+    }
+
+    /**
+     * @param mixed $option
+     * @return string
+     */
+    public function getFilterLink(mixed $option): string
+    {
+        $filters = (array)request()->query('filter', []);
+        $filters[$this->name] = $option;
+
+        return request()->fullUrlWithQuery(['page' => 1, 'filter' => $filters]);
     }
 
     /**
@@ -177,6 +211,78 @@ class Column
     public function setCurrentSortOrder(ColumnSortOrder $currentSortOrder): Column
     {
         $this->currentSortOrder = $currentSortOrder;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFilterable(): bool
+    {
+        return $this->filterable;
+    }
+
+    /**
+     * @param bool $filterable
+     * @return Column
+     */
+    public function setFilterable(bool $filterable): Column
+    {
+        $this->filterable = $filterable;
+        return $this;
+    }
+
+    /**
+     * @return array<string|int, string>
+     */
+    public function getFilterOptions(): array
+    {
+        return Arr::add($this->filterOptions, 'all', 'All');
+    }
+
+    /**
+     * @param array<string|int, string> $filterOptions
+     * @return Column
+     */
+    public function setFilterOptions(array $filterOptions): Column
+    {
+        $this->filterOptions = $filterOptions;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCurrentFilter(): mixed
+    {
+        return $this->currentFilter;
+    }
+
+    /**
+     * @param mixed|string $currentFilter
+     * @return Column
+     */
+    public function setCurrentFilter(mixed $currentFilter): Column
+    {
+        $this->currentFilter = $currentFilter;
+        return $this;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getDefaultFilterOption(): mixed
+    {
+        return $this->defaultFilterOption;
+    }
+
+    /**
+     * @param mixed|string $defaultFilterOption
+     * @return Column
+     */
+    public function setDefaultFilterOption(mixed $defaultFilterOption): Column
+    {
+        $this->defaultFilterOption = $defaultFilterOption;
         return $this;
     }
 }

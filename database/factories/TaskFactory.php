@@ -18,12 +18,16 @@ class TaskFactory extends Factory
      */
     public function definition()
     {
+        $timestamp = $this->faker->dateTimeThisDecade;
+
         return [
             'user_id' => User::factory(),
             'is_active' => true,
             'task_name' => $this->faker->unique()->sentence(),
             'task_notes' => $this->faker->paragraph(1),
             'task_url' => $this->faker->url(),
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
         ];
     }
 }
