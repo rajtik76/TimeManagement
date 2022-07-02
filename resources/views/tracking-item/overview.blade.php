@@ -11,7 +11,7 @@
             <input datepicker datepicker-format="mm/yyyy" datepicker-autohide type="text"
                    name="overview_date"
                    id="overview_date"
-                   value="{{ old('overview_date') }}"
+                   value="{{ old('overview_date', now()->format('m/Y')) }}"
                    class="border border-slate-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-30 p-2.5" required>
             @error('overview_date')
             <div class="text-sm text-red-600">
