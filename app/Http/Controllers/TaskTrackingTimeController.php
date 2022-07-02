@@ -64,8 +64,8 @@ class TaskTrackingTimeController extends Controller
 
         $items = TaskTrackingItem::query()
             ->with('task')
-            ->whereYear('item_date', $date->year)
-            ->whereMonth('item_date', $date->month)
+            ->whereYear('item_date', strval($date->year))
+            ->whereMonth('item_date', strval($date->month))
             ->orderByRaw('item_date, task_id')
             ->get();
 
