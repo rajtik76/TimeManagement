@@ -74,7 +74,7 @@ class Grid
      * @param Column $column
      * @return Grid
      */
-    public function setColumn(Column $column): Grid
+    public function addColumn(Column $column): Grid
     {
         $this->columns[] = $column;
         return $this;
@@ -92,7 +92,7 @@ class Grid
      * @param ColumnAction $action
      * @return $this
      */
-    public function setAction(ColumnAction $action): Grid
+    public function addAction(ColumnAction $action): Grid
     {
         $this->actions[$action->getName()] = $action;
         return $this;

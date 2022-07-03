@@ -4,15 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Task;
-use App\Services\Grid\Column;
-use App\Services\Grid\ColumnAction;
-use App\Services\Grid\ColumnSortOrder;
-use App\Services\Grid\Grid;
+use App\Models\TaskTrackingItem;
+use App\Services\GridInstancesForControllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Spatie\Html\Elements\A;
 
 class TaskController extends Controller
 {
@@ -27,48 +24,7 @@ class TaskController extends Controller
             ->join('customers', 'customer_id', '=', 'customers.id')
             ->with('customer')->withSum('trackingItems', 'item_hours');
 
-        /** @var array<int, string> $customers */
-        $customers = Customer::pluck('name', 'id')->toArray();
-
-        $grid = (new Grid())
-            ->setBuilder($tasks)
-            ->setConditionalRowClass(fn($data) => $data->is_active == 0 ? 'bg-red-200' : '')
-            ->setColumn(
-                (new Column('customer_id', 'Customer'))
-                    ->setSortable(true, 'customers.name')
-                    ->setFilterable(true)
-                    ->setFilterOptions($customers)
-                    ->setRenderWrapper(fn($data) => $data->customer->name)
-            )
-            ->setColumn(
-                (new Column('name', 'Task name'))
-                    ->setSortable(true)
-                    ->setRenderWrapper(fn($data) => $data->task_url
-                        ? A::create()
-                            ->href($data->task_url)
-                            ->target('_blank')
-                            ->class('font-medium hover:underline text-blue-500')
-                            ->text($data->task_name)
-                            ->toHtml()
-                        : $data->task_name))
-            ->setColumn(
-                (new Column('is_active', 'Active'))
-                    ->setSortable(true)
-                    ->setRenderWrapper(fn($data) => $data->is_active ? 'Yes' : 'No')
-                    ->setFilterable(true)
-                    ->setFilterOptions([0 => 'No', 1 => 'Yes'])
-                    ->setDefaultFilterOption(1)
-            )
-            ->setColumn(
-                (new Column('tracking_items_sum_item_hours', 'Hours'))
-                    ->setSortable(true)
-                    ->setRenderWrapper(fn($data) => html()->a(route('task.tracking', $data->id))->attribute('target', '_blank')->class('font-medium hover:underline text-blue-500')->text($data->tracking_items_sum_item_hours)->toHtml())
-            )
-            ->setColumn((new Column('task_notes', 'Task notes'))->setSortable(true))
-            ->setColumn((new Column('created_at', 'Created'))->setSortable(true)->setDefaultSortOrder(ColumnSortOrder::DESC))
-            ->setAction(new ColumnAction('edit', fn($data) => A::create()->href(route('task.edit', $data->id))->class('font-bold text-white bg-blue-500 py-1.5 px-4 rounded')->text('Edit')));
-
-        return view('task.index', compact('grid'));
+        return view('task.index', ['grid' => GridInstancesForControllers::taskControllerIndex($tasks)]);
     }
 
     /**
@@ -79,9 +35,7 @@ class TaskController extends Controller
      */
     public function trackingTimeIndex(Task $task): View
     {
-        $trackingItems = $task->trackingItems()->orderByRaw('item_date desc, created_at desc')->paginate(10);
-
-        return view('task.tracking-index', compact('trackingItems', 'task'));
+        return view('task.tracking-index', ['grid' => GridInstancesForControllers::taskControllerTrackingTimeIndex(TaskTrackingItem::query()->where('task_id', $task->id)), 'task' => $task]);
     }
 
     /**

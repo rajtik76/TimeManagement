@@ -7,6 +7,8 @@ use Illuminate\Support\Arr;
 
 class Column
 {
+    public const FILTER_ALL_OPTION = 'all';
+
     /**
      * @var string
      */
@@ -48,14 +50,14 @@ class Column
     protected array $filterOptions = [];
 
     /**
-     * @var mixed|string
+     * @var mixed
      */
-    protected mixed $defaultFilterOption = 'all';
+    protected mixed $defaultFilterOption = self::FILTER_ALL_OPTION;
 
     /**
-     * @var mixed|string
+     * @var mixed
      */
-    protected mixed $currentFilter = 'all';
+    protected mixed $currentFilter = self::FILTER_ALL_OPTION;
 
     /**
      * @var callable|null
@@ -117,14 +119,16 @@ class Column
     }
 
     /**
-     * @param bool $sortable
+     * @param ColumnSortOrder $default
      * @param null|string $rawColumn
      * @return Column
      */
-    public function setSortable(bool $sortable, null|string $rawColumn = null): Column
+    public function sortable(ColumnSortOrder $default = ColumnSortOrder::NONE, null|string $rawColumn = null): Column
     {
-        $this->sortable = $sortable;
+        $this->sortable = true;
+        $this->defaultSortOrder = $default;
         $this->sortRawColumn = $rawColumn;
+
         return $this;
     }
 
@@ -193,16 +197,6 @@ class Column
     }
 
     /**
-     * @param ColumnSortOrder $defaultSortOrder
-     * @return Column
-     */
-    public function setDefaultSortOrder(ColumnSortOrder $defaultSortOrder): Column
-    {
-        $this->defaultSortOrder = $defaultSortOrder;
-        return $this;
-    }
-
-    /**
      * @return ColumnSortOrder
      */
     public function getCurrentSortOrder(): ColumnSortOrder
@@ -229,12 +223,16 @@ class Column
     }
 
     /**
-     * @param bool $filterable
+     * @param array<int|string, string> $options
+     * @param mixed $default
      * @return Column
      */
-    public function setFilterable(bool $filterable): Column
+    public function filterable(array $options, mixed $default = self::FILTER_ALL_OPTION): Column
     {
-        $this->filterable = $filterable;
+        $this->filterable = true;
+        $this->filterOptions = $options;
+        $this->defaultFilterOption = $default;
+
         return $this;
     }
 
@@ -244,16 +242,6 @@ class Column
     public function getFilterOptions(): array
     {
         return Arr::add($this->filterOptions, 'all', 'All');
-    }
-
-    /**
-     * @param array<string|int, string> $filterOptions
-     * @return Column
-     */
-    public function setFilterOptions(array $filterOptions): Column
-    {
-        $this->filterOptions = $filterOptions;
-        return $this;
     }
 
     /**
@@ -280,16 +268,6 @@ class Column
     public function getDefaultFilterOption(): mixed
     {
         return $this->defaultFilterOption;
-    }
-
-    /**
-     * @param mixed|string $defaultFilterOption
-     * @return Column
-     */
-    public function setDefaultFilterOption(mixed $defaultFilterOption): Column
-    {
-        $this->defaultFilterOption = $defaultFilterOption;
-        return $this;
     }
 
     /**
