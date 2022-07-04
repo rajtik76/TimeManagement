@@ -26,11 +26,9 @@ class TaskTrackingTimeController extends Controller
         if ($item->task) {
 
             $item->delete();
-
         } else {
 
             throw new InvalidArgumentException("Task ID not found");
-
         }
 
         return to_route('task.tracking', $item->task->id)->with('success', "Time tracking with time spent: {$item->item_hours} was successfully deleted");
@@ -66,14 +64,14 @@ class TaskTrackingTimeController extends Controller
         }
 
         $items = TaskTrackingItem::query()
-            ->whereHas('task', fn(Builder $builder) => $builder->where('customer_id', $attributes['customer']))
-            ->with('task')
+            ->whereHas('task', fn (Builder $builder) => $builder->where('customer_id', $attributes['customer']))
+            ->with(['task', 'task.customer'])
             ->whereYear('item_date', strval($date->year))
             ->whereMonth('item_date', strval($date->month))
             ->orderByRaw('item_date, task_id')
             ->get();
 
-        return view('tracking-item.overview-pdf', compact('items', 'date'));
+        return view('tracking-item.overview-pdf', ['items' => $items, 'date' => $date, 'customer' => Customer::find($attributes['customer'])]);
     }
 
     /**
@@ -114,11 +112,9 @@ class TaskTrackingTimeController extends Controller
 
             $item->fill($this->validateRequest($request, false));
             $item->save();
-
         } else {
 
             throw new InvalidArgumentException("Task ID not found");
-
         }
 
         return to_route('task.tracking', $item->task->id)->with('success', "Your tracked item id:{$item->id} was successfully edited");
@@ -160,7 +156,6 @@ class TaskTrackingTimeController extends Controller
         if ($newItem) {
 
             $rules['task_id'] = 'required|numeric';
-
         }
 
         $attributes = $request->validate($rules);
@@ -168,11 +163,9 @@ class TaskTrackingTimeController extends Controller
         if ($date = Carbon::createFromFormat('d/m/Y', $attributes['item_date'])) {
 
             $attributes['item_date'] = $date;
-
         } else {
 
             throw new InvalidArgumentException("Can't parse date `{$attributes['item_date']}` to Carbon");
-
         }
 
 
