@@ -88,7 +88,7 @@
 
                 {{-- actions --}}
                 @if($grid->getActions())
-                    <td class="px-6 py-2 border flex flex-row gap-1 items-center">
+                    <td class="px-6 py-2 flex flex-row gap-1 items-center">
                         @foreach($grid->getActions() as $action)
                             <span>{!! $action->render($data) !!}</span>
                         @endforeach

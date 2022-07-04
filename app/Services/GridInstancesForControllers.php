@@ -94,7 +94,7 @@ class GridInstancesForControllers
      */
     private static function getEditAnchorTag(string $route): string
     {
-        return A::create()->href($route)->class('font-bold text-white bg-blue-500 py-1.5 px-4 rounded')->text('Edit')->toHtml();
+        return A::create()->href($route)->class('text-white bg-blue-500 py-1.5 px-4 rounded')->text('Edit')->toHtml();
     }
 
     /**
